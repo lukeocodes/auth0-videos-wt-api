@@ -4,7 +4,8 @@ import express from 'express';
 import Webtask from 'webtask-tools';
 import MLab from 'mlab-data-api';
 
-const app = new express();
+const app = new express(),
+  mLab = new MLab;
 
 const RESPONSE = {
   OK : {
