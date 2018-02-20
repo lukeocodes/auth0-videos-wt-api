@@ -26,7 +26,13 @@ app.post('/:uid/:video', (req, res) => {
   
   console.log(uid, video);
   
-  data.listDatabases()
+  data.listDocuments({
+    database: 'auth0-videos',
+    collection: 'viewers',
+    query: {
+      'viewer': uid
+    }
+  })
   .then(function (response) {
     console.log('got',response.data)
   })
