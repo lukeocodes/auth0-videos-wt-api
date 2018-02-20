@@ -14,15 +14,15 @@ const RESPONSE = {
   }
 };
 
-const data = mLab({
-  key: req.webtaskContext.secrets.MLAB_KEY
-});
-
 app.use(bodyParser.json());
 
-app.post('/:uid/:video', (req, res) => {
+app.get('/:uid/watch/:video', (req, res) => {
   const uid = req.params.uid,
     video = req.params.video;
+
+  data = mLab({
+    key: req.webtaskContext.secrets.MLAB_KEY
+  });
 
   data.listDocuments({
     database: 'auth0-videos',
@@ -45,7 +45,9 @@ app.post('/:uid/:video', (req, res) => {
 app.get('/:uid', (req, res) => {
   const uid = req.params.uid;
   
-  console.log(uid, video);
+  data = mLab({
+    key: req.webtaskContext.secrets.MLAB_KEY
+  });
   
   data.listDocuments({
     database: 'auth0-videos',
@@ -55,14 +57,13 @@ app.get('/:uid', (req, res) => {
     }
   })
   .then(function (response) {
-    console.log('got',response.data)
+    res.writeHead(200, { 'Content-Type': 'application/json'});
+    res.end(JSON.stringify(response.data));
   })
   .catch(function (error) {
-    console.log('error', error)
+    res.writeHead(400, { 'Content-Type': 'application/json'});
+    res.end(JSON.stringify(RESPONSE.ERROR));
   });
-  
-  res.writeHead(200, { 'Content-Type': 'application/json'});
-  res.end(JSON.stringify(RESPONSE.OK));
 });
 
 module.exports = wt.fromExpress(app);
