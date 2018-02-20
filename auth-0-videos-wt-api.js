@@ -69,4 +69,4 @@ app.get('/:uid', (req, res) => {
   });
 });
 
-module.exports = wt.fromExpress(app);
+module.exports = Webtask.fromExpress(app);
