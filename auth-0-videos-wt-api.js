@@ -4,9 +4,7 @@ import express from 'express';
 import Webtask from 'webtask-tools';
 import MLab from 'mlab-data-api';
 
-const app = new express(),
-  mLab = new MLab;
-
+const app = new express();
 const RESPONSE = {
   OK : {
     statusCode : 200,
@@ -24,7 +22,7 @@ app.get('/:uid/watch/:video', (req, res) => {
   const uid = req.params.uid,
     video = req.params.video;
 
-  data = mLab({
+  data = MLab({
     key: req.webtaskContext.secrets.MLAB_KEY
   });
 
@@ -49,7 +47,7 @@ app.get('/:uid/watch/:video', (req, res) => {
 app.get('/:uid', (req, res) => {
   const uid = req.params.uid;
   
-  data = mLab({
+  data = MLab({
     key: req.webtaskContext.secrets.MLAB_KEY
   });
   
