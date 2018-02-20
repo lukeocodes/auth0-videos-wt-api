@@ -7,17 +7,6 @@ import MLab from 'mlab-data-api';
 const app = new express();
 const database = 'auth0-videos';
 const collection = 'viewers';
-const RESPONSE = {
-  OK : {
-    statusCode : 200,
-    message: "OK",
-    header: 
-  },
-  ERROR : {
-    statusCode : 400,
-    message: "ERROR",
-  }
-};
 
 app.use(bodyParser.json());
 
