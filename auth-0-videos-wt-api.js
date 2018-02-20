@@ -5,14 +5,17 @@ import Webtask from 'webtask-tools';
 import MLab from 'mlab-data-api';
 
 const app = new express();
+const database = 'auth0-videos';
+const collection = 'viewers';
 const RESPONSE = {
   OK : {
     statusCode : 200,
     message: "OK",
+    header: 
   },
   ERROR : {
     statusCode : 400,
-    message: "ERROR"
+    message: "ERROR",
   }
 };
 
@@ -27,8 +30,8 @@ app.get('/:uid/watch/:video', (req, res) => {
   });
 
   data.listDocuments({
-    database: 'auth0-videos',
-    collection: 'viewers',
+    database: database,
+    collection: collection,
     query: {
       'viewer': uid
     }
@@ -37,11 +40,15 @@ app.get('/:uid/watch/:video', (req, res) => {
     console.log('got',response.data)
   })
   .catch(function (error) {
-    console.log('error', error)
+    res.writeHead(400, { 'Content-Type': 'application/json'});
+    res.end(JSON.stringify({
+      statusCode : 400,
+      message: "ERROR",
+    }));
   });
   
   res.writeHead(200, { 'Content-Type': 'application/json'});
-  res.end(JSON.stringify(RESPONSE.OK));
+  res.end(JSON.stringify('hello'));
 });
 
 app.get('/:uid', (req, res) => {
@@ -52,8 +59,8 @@ app.get('/:uid', (req, res) => {
   });
   
   data.listDocuments({
-    database: 'auth0-videos',
-    collection: 'viewers',
+    database: database,
+    collection: collection,
     query: {
       'viewer': uid
     }
@@ -64,7 +71,10 @@ app.get('/:uid', (req, res) => {
   })
   .catch(function (error) {
     res.writeHead(400, { 'Content-Type': 'application/json'});
-    res.end(JSON.stringify(RESPONSE.ERROR));
+    res.end(JSON.stringify({
+      statusCode : 400,
+      message: "ERROR",
+    }));
   });
 });
 
