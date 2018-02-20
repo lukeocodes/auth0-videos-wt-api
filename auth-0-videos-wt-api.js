@@ -26,6 +26,17 @@ app.post('/:uid/:video', (req, res) => {
   
   console.log(uid, video);
   
+  data.listDatabases()
+  .then(function (response) {
+    console.log('got',response.data)
+  })
+  .catch(function (error) {
+    console.log('error', error)
+  });
+  
+  res.writeHead(200, { 'Content-Type': 'application/json'});
+  res.end(JSON.stringify(RESPONSE.OK));
+
 });
 
 module.exports = wt.fromExpress(app);
