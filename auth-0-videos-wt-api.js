@@ -1,7 +1,10 @@
-const app = new (require('express'))(),
-  bodyParser = require('body-parser'),
-  wt = require('webtask-tools'),
-  mLab = require('mlab-data-api');
+'use latest';
+import bodyParser from 'body-parser';
+import express from 'express';
+import Webtask from 'webtask-tools';
+import MLab from 'mlab-data-api';
+
+const app = new express();
 
 const RESPONSE = {
   OK : {
