@@ -14,15 +14,36 @@ const RESPONSE = {
   }
 };
 
+const data = mLab({
+  key: req.webtaskContext.secrets.MLAB_KEY
+});
+
 app.use(bodyParser.json());
 
 app.post('/:uid/:video', (req, res) => {
   const uid = req.params.uid,
     video = req.params.video;
-    
-  data = mLab({
-    key: req.webtaskContext.secrets.MLAB_KEY
+
+  data.listDocuments({
+    database: 'auth0-videos',
+    collection: 'viewers',
+    query: {
+      'viewer': uid
+    }
+  })
+  .then(function (response) {
+    console.log('got',response.data)
+  })
+  .catch(function (error) {
+    console.log('error', error)
   });
+  
+  res.writeHead(200, { 'Content-Type': 'application/json'});
+  res.end(JSON.stringify(RESPONSE.OK));
+});
+
+app.get('/:uid', (req, res) => {
+  const uid = req.params.uid;
   
   console.log(uid, video);
   
