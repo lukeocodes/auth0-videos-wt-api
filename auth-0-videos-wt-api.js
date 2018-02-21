@@ -11,8 +11,8 @@ const collection = 'viewers';
 app.use(bodyParser.json());
 
 app.get('/:uid/watch/:video', (req, res) => {
-  const uid = req.params.uid,
-    video = req.params.video;
+  const uid = req.params.uid;
+  const video = req.params.video;
 
   data = MLab({
     key: req.webtaskContext.secrets.MLAB_KEY
