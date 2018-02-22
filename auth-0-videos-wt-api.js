@@ -1,5 +1,4 @@
 'use latest';
-import bodyParser from 'body-parser';
 import express from 'express';
 import Webtask from 'webtask-tools';
 import MLab from 'mlab-data-api';
@@ -7,8 +6,6 @@ import MLab from 'mlab-data-api';
 const app = new express();
 const database = 'auth0-videos';
 const collection = 'viewers';
-
-app.use(bodyParser.json());
 
 app.get('/:uid/watch/:video', (req, res) => {
   const uid = req.params.uid;
