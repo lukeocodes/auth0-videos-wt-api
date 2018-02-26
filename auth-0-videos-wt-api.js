@@ -1,67 +1,48 @@
 'use latest';
+
 import express from 'express';
-import Webtask from 'webtask-tools';
-import MLab from 'mlab-data-api';
+import { fromExpress } from 'webtask-tools';
+import bodyParser from 'body-parser';
+import jwksRsa from 'jwks-rsa';
+import jwt from 'express-jwt';
 
-const app = new express();
-const database = 'auth0-videos';
+const database = '';
 const collection = 'viewers';
+const mLab=MLab({
+  key: '<YOUR MLAB API DATA KEY>',
+  database:'auth0-videos', //optional 
+});
 
-app.get('/:uid/watch/:video', (req, res) => {
-  const uid = req.params.uid;
-  const video = req.params.video;
+const app = express();
 
-  data = MLab({
-    key: req.webtaskContext.secrets.MLAB_KEY
-  });
+app.use(bodyParser.json());
 
-  data.listDocuments({
-    database: database,
-    collection: collection,
-    query: {
-      'viewer': uid
-    }
-  })
+app.use((req, res, next) => { 
+  const issuer = 'https://' + req.webtaskContext.secrets.AUTH0_DOMAIN + '/';
+  jwt({
+    secret: jwksRsa.expressJwtSecret({ jwksUri: issuer + '.well-known/jwks.json' }),
+    audience: req.webtaskContext.secrets.AUDIENCE,
+    issuer: issuer,
+    algorithms: [ 'RS256' ]
+  })(req, res, next);
+});
+
+app.get('/test', (req, res) => {
+  mLab.listDatabases()
   .then(function (response) {
     console.log('got',response.data)
   })
   .catch(function (error) {
-    res.writeHead(400, { 'Content-Type': 'application/json'});
-    res.end(JSON.stringify({
-      statusCode : 400,
-      message: "ERROR",
-    }));
-  });
+    console.log('error', error)
+  })
   
-  res.writeHead(200, { 'Content-Type': 'application/json'});
-  res.end(JSON.stringify('hello'));
+  res.send(200);
 });
 
-app.get('/:uid', (req, res) => {
-  const uid = req.params.uid;
-  
-  data = MLab({
-    key: req.webtaskContext.secrets.MLAB_KEY
-  });
-  
-  data.listDocuments({
-    database: database,
-    collection: collection,
-    query: {
-      'viewer': uid
-    }
-  })
-  .then(function (response) {
-    res.writeHead(200, { 'Content-Type': 'application/json'});
-    res.end(JSON.stringify(response.data));
-  })
-  .catch(function (error) {
-    res.writeHead(400, { 'Content-Type': 'application/json'});
-    res.end(JSON.stringify({
-      statusCode : 400,
-      message: "ERROR",
-    }));
-  });
+app.get('/', (req, res) => {
+  // add your logic, you can use scopes from req.user
+  // req.user.sub;
+  res.send(200);
 });
 
-module.exports = Webtask.fromExpress(app);
+module.exports = fromExpress(app);
