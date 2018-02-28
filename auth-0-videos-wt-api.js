@@ -2,13 +2,9 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-const MLab = require('mlab-data-api');
+const mongoose = require('mongoose');
 const wt = require('webtask-tools');
 
-// const mLab=MLab({
-//   key: '<YOUR MLAB API DATA KEY>',
-//   database:'auth0-videos', //optional
-// });
 
 const app = express();
 
