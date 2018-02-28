@@ -1,23 +1,20 @@
-'use latest';
+const bodyParser = require('body-parser');
+const express = require('express');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+const MLab = require('mlab-data-api');
+const wt = require('webtask-tools');
 
-import express from 'express';
-import { fromExpress } from 'webtask-tools';
-import bodyParser from 'body-parser';
-import jwksRsa from 'jwks-rsa';
-import jwt from 'express-jwt';
-
-const database = '';
-const collection = 'viewers';
-const mLab=MLab({
-  key: '<YOUR MLAB API DATA KEY>',
-  database:'auth0-videos', //optional 
-});
+// const mLab=MLab({
+//   key: '<YOUR MLAB API DATA KEY>',
+//   database:'auth0-videos', //optional
+// });
 
 const app = express();
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => { 
+app.use((req, res, next) => {
   const issuer = 'https://' + req.webtaskContext.secrets.AUTH0_DOMAIN + '/';
   jwt({
     secret: jwksRsa.expressJwtSecret({ jwksUri: issuer + '.well-known/jwks.json' }),
@@ -45,4 +42,4 @@ app.get('/', (req, res) => {
   res.send(200);
 });
 
-module.exports = fromExpress(app);
+module.exports = wt.fromExpress(app);
