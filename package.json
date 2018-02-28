@@ -1,5 +1,9 @@
 {
-  "url": "https://github.com/lukeoliff/auth0-videos-wt-api",
+  "url": "https://github.com/lukeoliff/auth0-videos-wt-api/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukeoliff/auth0-videos-wt-api.git"
+  },
   "email": "luke.oliff@auth0.com",
   "license": "MIT",
   "dependencies": {
